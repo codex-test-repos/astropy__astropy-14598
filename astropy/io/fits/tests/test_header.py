@@ -626,6 +626,13 @@ class TestHeaderFunctions(FitsTestCase):
             "CONTINUE  '' / &long comment &                                                  "
         )
 
+    @pytest.mark.parametrize("n", range(60, 70))
+    def test_null_string_preserved_across_continue(self, n):
+        """Regression test for handling of doubled quotes in CONTINUE cards."""
+        card1 = fits.Card("CONFIG", "x" * n + "''")
+        card2 = fits.Card.fromstring(str(card1))
+        assert card1.value == card2.value
+
     def test_hierarch_card_creation(self):
         # Test automatic upgrade to hierarch card
         with pytest.warns(
