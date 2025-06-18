@@ -858,11 +858,11 @@ class Card(_Verify):
                 if not m:
                     return kw, vc
 
-                value = m.group("strg") or ""
-                value = value.rstrip().replace("''", "'")
-                if value and value[-1] == "&":
-                    value = value[:-1]
-                values.append(value)
+                value_piece = m.group("strg") or ""
+                value_piece = value_piece.rstrip()
+                if value_piece and value_piece[-1] == "&":
+                    value_piece = value_piece[:-1]
+                values.append(value_piece)
                 comment = m.group("comm")
                 if comment:
                     comments.append(comment.rstrip())
@@ -871,7 +871,8 @@ class Card(_Verify):
                 valuecomment = "".join(values)
             else:
                 # CONTINUE card
-                valuecomment = f"'{''.join(values)}' / {' '.join(comments)}"
+                value = "".join(values).replace("''", "'")
+                valuecomment = f"'{value}' / {' '.join(comments)}"
             return keyword, valuecomment
 
         if self.keyword in self._special_keywords:
